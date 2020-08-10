@@ -16,7 +16,7 @@ install-venv:
 	@python3 -m venv .env
 
 # https://packaging.python.org/tutorials/packaging-projects/
-build:
+build: tests
 	@$(PIP) setuptools wheel
 	@python3 setup.py sdist bdist_wheel
 

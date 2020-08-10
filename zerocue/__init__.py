@@ -45,18 +45,18 @@ class CueTime:
         return "{:02}:{:02}:{:02}".format(self.minute, self.second, self.frame)
 
     def __sub__(self, other):
-        result_frame = self.frame - other.frame
+        frame = self.frame - other.frame
 
-        if result_frame >= 0:
-            result_delta = self.delta - other.delta
+        if frame >= 0:
+            delta = self.delta - other.delta
         else:
-            result_delta = self.delta - other.delta - timedelta(seconds=1)
+            delta = self.delta - other.delta - timedelta(seconds=1)
 
-        minutes, seconds = divmod(result_delta.seconds, 60)
+        minutes, seconds = divmod(delta.seconds, 60)
 
         return CueTime(minute=minutes,
                        second=seconds,
-                       frame=result_frame % self.FRAMES_PER_SECOND)
+                       frame=frame % self.FRAMES_PER_SECOND)
 
     def __eq__(self, other):
         return self.delta == other.delta and self.frame == other.frame
@@ -79,7 +79,6 @@ def create_new_cue(cue_file: BinaryIO, outfile: BinaryIO) -> None:
         if match:
             print_debug("Parsing line #{:03}: '{}'".format(num, decoded_line.rstrip().lstrip(" ")))
             time_str = match.groups(1)[0]
-            index = decoded_line.index(match.groups(1)[0])
 
             cue = CueTime(*time_str.split(":"))
 
@@ -89,6 +88,7 @@ def create_new_cue(cue_file: BinaryIO, outfile: BinaryIO) -> None:
                 print_debug(f"Setting timedelta delay: {delay}\n")
 
             print_debug("New cue time")
+            index = decoded_line.index(time_str)
             line = bytes(f"{decoded_line[0:index]}{cue - delay}\n", encoding="utf-8")
 
         outfile.write(line)
@@ -105,7 +105,7 @@ def main():
     parser.add_argument("-o", "--output", help="write to OUTPUT file instead of STDOUT")
     args = parser.parse_args()
 
-    global DEBUG
+    global DEBUG # pylint: disable=global-statement
     DEBUG = args.verbose
 
     if args.output:

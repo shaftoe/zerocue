@@ -33,7 +33,7 @@ optional arguments:
 
 ## Examples
 
-Assuming `playlist.cue` is a file in the current working directory which has the following content:
+Assuming `playlist.cue` is a file in the current working directory which has the following example content (CUE sheet excerpt taken from <https://kodi.wiki/view/Cue_sheets>):
 
 ```cue
 REM GENRE Ska
@@ -84,8 +84,6 @@ FILE "The Specials - Singles.wav" WAVE
     INDEX 00 03:44:19
     INDEX 01 03:44:71
 ```
-
-Example CUE sheet content excerpt taken from <https://kodi.wiki/view/Cue_sheets>.
 
 To create a new CUE sheet you can either redirect `STDIN` to a (new) file or use the `--output` option. These two commands should be equivalent and will replace `new_playlist.cue` content if already present:
 
