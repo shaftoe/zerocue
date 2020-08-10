@@ -1,0 +1,10 @@
+__pycache__/
+.eggs/
+.env/
+.vagrant/
+.vscode/
+*.cue
+*.egg-info/
+build/
+dist/
+Vagrantfile
