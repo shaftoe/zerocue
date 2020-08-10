@@ -85,7 +85,7 @@ FILE "The Specials - Singles.wav" WAVE
     INDEX 01 03:44:71
 ```
 
-Example CUE sheet content excerpt taken from FIXME.
+Example CUE sheet content excerpt taken from <https://kodi.wiki/view/Cue_sheets>.
 
 To create a new CUE sheet you can either redirect `STDIN` to a (new) file or use the `--output` option. These two commands should be equivalent and will replace `new_playlist.cue` content if already present:
 
