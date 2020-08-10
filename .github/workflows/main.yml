@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - uses: actions/checkout@v2
+
+    - name: Install tests dependencies
+      run: make dependencies tests
+
+    - name: Run tests
+      run: make tests
