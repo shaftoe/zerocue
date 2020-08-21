@@ -15,9 +15,9 @@ NOTE: this is the version I used to develop and test it but it should work with 
 ## Usage
 
 ```text
-usage: zerocue [-h] [-v] [-o OUTPUT] cuefile
+usage: zerocue [-h] [-v] [-o OUTPUT | -w] cuefile
 
-zerocue - remove first INDEX track time from every following INDEXes in a CUE sheet file
+remove first INDEX track time from every following INDEXes in a CUE sheet file
 
 positional arguments:
   cuefile               source CUE file (e.g playlist.cue)
@@ -27,6 +27,7 @@ optional arguments:
   -v, --verbose         send informative logs to STDERR
   -o OUTPUT, --output OUTPUT
                         write to OUTPUT file instead of STDOUT
+  -w, --inline          overwrite source CUE file
 ```
 
 `zerocue` reads content from a [CUE sheet](https://en.wikipedia.org/wiki/Cue_sheet_(computing)) file (which name is the only accepted and required CLI argument) and prints the content of the same CUE sheet file with updated `INDEX` time values, i.e. set the first `INDEX` timestamp to `00:00:00` and remove the initial first `INDEX` track elapsed time from every subsequent `INDEX` record in the sheet.
@@ -85,10 +86,16 @@ FILE "The Specials - Singles.wav" WAVE
     INDEX 01 03:44:71
 ```
 
-To create a new CUE sheet you can either redirect `STDIN` to a (new) file or use the `--output` option. These two commands should be equivalent and will replace `new_playlist.cue` content if already present:
+To create a new CUE sheet you can either redirect `STDIN` to a (new) file, use the `--output` option to create a new file, or use the `--inline` option to update the source file.
+
+These two commands should be equivalent and will replace `new_playlist.cue` content if already present:
 
 - `zerocue playlist.cue > new_playlist.cue`
 - `zerocue --output=new_playlist.cue playlist.cue`
+
+while this will overwrite the content of `playlist.cue`:
+
+- `zerocue --inline playlist.cue`
 
 ## Unit Tests
 

@@ -1,5 +1,6 @@
 from datetime import timedelta
 from sys import stdout, stderr
+from tempfile import TemporaryFile
 from typing import Union, BinaryIO
 import argparse
 import re
@@ -34,10 +35,10 @@ class CueTime:
             assert 0 <= self.second < 60
             assert 0 <= self.frame < self.FRAMES_PER_SECOND
 
-        except (AssertionError, TypeError, ValueError):
+        except (AssertionError, TypeError, ValueError) as error:
             print(f"\nFATAL: '{minute}:{second}:{frame}' is not a valid CUE TIMESTAMP, aborting",
                   file=stderr)
-            raise CueError
+            raise CueError from error
 
         print_debug(" => %s\n" % self)
 
@@ -102,7 +103,11 @@ def main():
     parser.add_argument("cuefile", help="source CUE file (e.g playlist.cue)")
     parser.add_argument("-v", "--verbose", help="send informative logs to STDERR",
                         action="store_true")
-    parser.add_argument("-o", "--output", help="write to OUTPUT file instead of STDOUT")
+
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-o", "--output", help="write to OUTPUT file instead of STDOUT")
+    group.add_argument("-w", "--inline", help="overwrite source CUE file", action="store_true")
+
     args = parser.parse_args()
 
     global DEBUG # pylint: disable=global-statement
@@ -111,6 +116,11 @@ def main():
     if args.output:
         output = open(args.output, "wb")
         print_debug(f"Writing new CUE file to {args.output}\n")
+
+    elif args.inline:
+        output = TemporaryFile()
+        print_debug(f"WARNING: Overwriting {args.cuefile} content\n")
+
     else:
         output = stdout.buffer
         print_debug("Printing new CUE file content to STDOUT\n")
@@ -118,15 +128,22 @@ def main():
     try:
         with open(args.cuefile, "rb") as cuefile:
             create_new_cue(cuefile, output)
-    except CueError:
+
+    except CueError as error:
         if args.output:
             output.close()
-        raise SystemExit(1)
+        raise SystemExit(1) from error
 
     if args.output:
         print_debug(f"New CUE file {args.output} ready\n")
         output.close()
 
+    if args.inline:
+        with open(args.cuefile, "wb") as cuefile:
+            output.seek(0)
+            cuefile.write(output.read())
+            output.close()
+        print_debug(f"CUE file {args.cuefile} updated\n")
 
 if __name__ == "__main__":
     main()
