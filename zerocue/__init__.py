@@ -1,6 +1,6 @@
 from datetime import timedelta
+from io import BytesIO
 from sys import stdout, stderr
-from tempfile import TemporaryFile
 from typing import Union, BinaryIO
 import argparse
 import re
@@ -118,7 +118,7 @@ def main():
         print_debug(f"Writing new CUE file to {args.output}\n")
 
     elif args.inline:
-        output = TemporaryFile()
+        output = BytesIO()
         print_debug(f"WARNING: Overwriting {args.cuefile} content\n")
 
     else:
