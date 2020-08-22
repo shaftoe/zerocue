@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="zerocue",
-    version="0.2.0",
+    version="0.3.0",
     packages=find_packages(),
 
     description="Remove first INDEX track time from every " \
