@@ -112,4 +112,4 @@ source .env/bin/activate
 
 ## Contribute
 
-Contributions are welcome, just open an issue/pull request or [get in touch with me directly](https://a.l3x/in/contact) if you prefer.
+Contributions are welcome, just open an issue/pull request or [get in touch with me directly](https://a.l3x.in/contact) if you prefer.
